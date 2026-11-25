@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# simulation/Allrun — Full OpenFOAM v13 Simulation Matrix Runner
+# Runs all 30 matrix cases (NACA 0012, 2412, 4412 x SA & SST x 0,4,8,12,15 deg)
+# plus the controlled a08_kfix case, then runs post-processing.
+# ==============================================================================
+
+set -euo pipefail
+
+SIM_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SIM_DIR/.." && pwd)"
+cd "$PROJECT_ROOT"
+
+echo "================================================================="
+echo "  OpenFOAM v13 Full RANS Simulation Suite (30 + 1 Cases)"
+echo "  Project Root: $PROJECT_ROOT"
+echo "================================================================="
+
+if [ -f /opt/openfoam13/etc/bashrc ]; then
+    # shellcheck disable=SC1091
+    source /opt/openfoam13/etc/bashrc
+else
+    echo "[!] Error: /opt/openfoam13/etc/bashrc not found."
+    exit 1
+fi
+
+echo "=== [1/4] Running Spalart-Allmaras (SA) Sweep (15 cases) ==="
+python3 "$SIM_DIR/run_sweep.py" SA
+
+echo "=== [2/4] Running Menter k-omega SST Sweep (15 cases) ==="
+python3 "$SIM_DIR/run_sweep.py" SST
+
+echo "=== [3/4] Running Controlled a08_kfix Case ==="
+python3 "$SIM_DIR/run_a08_kfix.py"
+
+echo "=== [4/4] Extracting Results & Generating Publication Figures ==="
+bash "$PROJECT_ROOT/reproduce_outputs.sh"
+
+echo "================================================================="
+echo "  [OK] Full Simulation Matrix & Post-Processing Complete"
+echo "================================================================="
