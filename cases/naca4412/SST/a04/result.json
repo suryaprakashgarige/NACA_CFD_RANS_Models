@@ -1,0 +1,15 @@
+{
+  "case": "/home/surya/EDP_CFD_NACA/airfoil-validation/cases/naca4412/SST/a04",
+  "airfoil": "naca4412",
+  "model": "SST",
+  "alpha": 4.0,
+  "wall_time": 578.3752086162567,
+  "iterations": 2500,
+  "cl": 0.90786092,
+  "cd": 0.008177014,
+  "cm": -0.098154993,
+  "yplus_max": 0.0,
+  "flag": "cap_hit",
+  "bounding_k": 0,
+  "relax_factor": "0.3/0.7"
+}

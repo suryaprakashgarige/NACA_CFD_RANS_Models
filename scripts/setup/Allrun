@@ -1,0 +1,65 @@
+#!/bin/bash
+
+CASE_DIR="$1"
+if [ -z "$CASE_DIR" ]; then
+    echo "Usage: $0 <case_dir>"
+    exit 1
+fi
+
+source /opt/openfoam13/etc/bashrc
+
+cd "$CASE_DIR"
+CASE_NAME=$(basename "$CASE_DIR")
+AIRFOIL_DIR=$(dirname $(dirname "$CASE_DIR"))
+AIRFOIL=$(basename "$AIRFOIL_DIR")
+MODEL=$(basename $(dirname "$CASE_DIR"))
+
+echo "=================================================="
+echo "Starting case: ${AIRFOIL}/${MODEL}/${CASE_NAME}"
+echo "Case directory: $(pwd)"
+START_TIME=$(date +%s)
+
+# Decompose if not already decomposed
+if [ ! -d "processor0" ]; then
+    echo "Decomposing case across 3 processors..."
+    decomposePar > log.decomposePar 2>&1
+fi
+
+echo "Running foamRun -solver incompressibleFluid in parallel (3 MPI ranks)..."
+mpirun --mca btl_vader_single_copy_mechanism none -np 3 foamRun -parallel > log.foamRun 2>&1
+
+END_TIME=$(date +%s)
+ELAPSED=$((END_TIME - START_TIME))
+
+echo "Execution completed in ${ELAPSED} seconds."
+
+# Reconstruct latest time
+echo "Reconstructing latest time..."
+reconstructPar -latestTime > log.reconstructPar 2>&1 || true
+
+# Post-process yPlus
+echo "Evaluating yPlus..."
+foamPostProcess -func yPlus -latestTime > log.yPlus 2>&1 || true
+
+# Extract converged forces from postProcessing/forceCoeffs/0/forceCoeffs.dat
+FORCE_FILE=$(find postProcessing/forceCoeffs -name "forceCoeffs.dat" 2>/dev/null | head -n 1)
+if [ -n "$FORCE_FILE" ] && [ -f "$FORCE_FILE" ]; then
+    FINAL_LINE=$(tail -n 1 "$FORCE_FILE")
+    # Columns in forceCoeffs.dat: Time Cm Cd Cl Cl(f) Cl(r)
+    TIME=$(echo "$FINAL_LINE" | awk '{print $1}')
+    CM=$(echo "$FINAL_LINE" | awk '{print $2}')
+    CD=$(echo "$FINAL_LINE" | awk '{print $3}')
+    CL=$(echo "$FINAL_LINE" | awk '{print $4}')
+    echo "SUMMARY: Case=${AIRFOIL}/${MODEL}/${CASE_NAME} | Time=${TIME} | Cl=${CL} | Cd=${CD} | Cm=${CM} | WallTime=${ELAPSED}s"
+else
+    echo "Warning: forceCoeffs output not found."
+fi
+
+# Extract max yPlus
+YPLUS_FILE=$(find postProcessing/yPlus -name "yPlus.dat" 2>/dev/null | tail -n 1)
+if [ -n "$YPLUS_FILE" ] && [ -f "$YPLUS_FILE" ]; then
+    YPLUS_MAX=$(tail -n 1 "$YPLUS_FILE" | awk '{print $4}')
+    echo "yPlus max: $YPLUS_MAX"
+fi
+
+echo "Finished case: ${AIRFOIL}/${MODEL}/${CASE_NAME}"

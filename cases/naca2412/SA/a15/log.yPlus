@@ -1,0 +1,39 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 13-441953dfbb42
+Exec   : foamPostProcess -solver incompressibleFluid -func yPlus -latestTime
+Date   : Sep 26 2026
+Time   : 09:47:05
+Host   : "Surya"
+PID    : 16256
+I/O    : uncollated
+Case   : /home/surya/EDP_CFD_NACA/airfoil-validation/cases/naca2412/SA/a15
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Time = 0s
+Selecting solver incompressibleFluid
+Selecting viscosity model constant
+Selecting turbulence model type RAS
+    Selecting RAS turbulence model SpalartAllmaras
+No MRF models present
+
+yPlus yPlus write:
+    writing object yPlus
+    patch airfoil y+ : min = 2.254577, max = 2.742093, average = 2.311066
+
+
+End
+

@@ -1,0 +1,11 @@
+airfoil,metric,SA_RMS,SA_MAPE_pct,SST_RMS,SST_MAPE_pct,closest_model
+NACA 0012,Cl (Lift),0.0068,1.1,0.0111,1.9,Spalart-Allmaras
+NACA 0012,Cd (Drag),0.00054,5.5,0.00194,12.8,Spalart-Allmaras
+NACA 0012,"Cm,c/4 (Moment)",0.00012,,0.0032,,Spalart-Allmaras
+NACA 2412,Cl (Lift),0.0075,1.9,0.0085,1.8,Spalart-Allmaras
+NACA 2412,Cd (Drag),0.00215,29.4,0.0012,18.1,k-omega SST
+NACA 2412,"Cm,c/4 (Moment)",0.00084,,0.00102,,Spalart-Allmaras
+NACA 4412,Cl (Lift),0.0579,7.9,0.054,7.9,k-omega SST
+NACA 4412,Cd (Drag),0.00262,33.3,0.00132,15.6,k-omega SST
+NACA 4412,"Cm,c/4 (Moment)",0.0012,,0.0035,,Spalart-Allmaras
+OVERALL VERDICT,All 9 Metrics,,,,,SA Preferred Overall (6/9 Wins); SST Preferred for Cambered Section Drag (3/9 Wins)

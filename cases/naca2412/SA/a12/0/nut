@@ -1,0 +1,26 @@
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      nut;
+}
+dimensions      [0 2 -1 0 0 0 0];
+internalField   uniform 0.000000e+00;
+boundaryField
+{
+    airfoil
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    farfield
+    {
+        type            calculated;
+        value           uniform 0.000000e+00;
+    }
+    frontAndBack
+    {
+        type            empty;
+    }
+}

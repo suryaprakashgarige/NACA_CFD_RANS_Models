@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# OpenFOAM parallel & heavy binary field/mesh outputs (reproducible locally)
+cases/*/*/*/processor*/
+cases/*/*/*/VTK/
+cases/*/*/*/constant/polyMesh/
+cases/*/*/*/[1-9]*/
+mesh/*/*/constant/polyMesh/
+*.p2dfmt
+*.p3dfmt
+*.foam
+
+# Archives & OS files
+*.zip
+*.tar.gz
+.DS_Store
+Thumbs.db

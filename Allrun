@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Allrun — Master OpenFOAM-v13 Execution & Post-Processing Entrypoint
+# Usage:
+#   ./Allrun                 # Re-extract tables, cross-check, & regenerate figures
+#   ./Allrun --postprocess   # Same as default (fast post-processing on solved cases)
+#   ./Allrun --full          # Run full SA & SST OpenFOAM sweeps + post-processing
+#   ./Allrun --verify        # Run automated pytest integrity verification
+# ==============================================================================
+
+set -euo pipefail
+
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$PROJECT_ROOT"
+
+MODE="${1:---postprocess}"
+
+case "$MODE" in
+    --full)
+        echo "=== [1/4] Sourcing OpenFOAM v13 ==="
+        if [ -f /opt/openfoam13/etc/bashrc ]; then
+            # shellcheck disable=SC1091
+            source /opt/openfoam13/etc/bashrc
+        else
+            echo "[!] Error: /opt/openfoam13/etc/bashrc not found."
+            exit 1
+        fi
+
+        echo "=== [2/4] Setting up cases (NACA 0012, 2412, 4412) ==="
+        python3 "$PROJECT_ROOT/scripts/setup/setup_sweep_case.py"
+
+        echo "=== [3/4] Running SA & SST sweeps ==="
+        python3 "$PROJECT_ROOT/scripts/sweep/run_coarse_sweep.py" SA
+        python3 "$PROJECT_ROOT/scripts/sweep/run_coarse_sweep.py" SST
+        python3 "$PROJECT_ROOT/scripts/sweep/run_a08_kfix.py"
+
+        echo "=== [4/4] Running post-processing & figure generation ==="
+        bash "$PROJECT_ROOT/reproduce_outputs.sh"
+        ;;
+    --postprocess)
+        bash "$PROJECT_ROOT/reproduce_outputs.sh"
+        ;;
+    --verify)
+        PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python3 -m pytest -v "$PROJECT_ROOT/tests"
+        ;;
+    *)
+        echo "Usage: $0 [--postprocess | --full | --verify]"
+        exit 1
+        ;;
+esac

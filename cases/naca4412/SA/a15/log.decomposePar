@@ -1,0 +1,88 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 13-441953dfbb42
+Exec   : decomposePar
+Date   : Sep 26 2026
+Time   : 02:13:52
+Host   : "Surya"
+PID    : 240977
+I/O    : uncollated
+Case   : /home/surya/EDP_CFD_NACA/airfoil-validation/cases/naca4412/SA/a15
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Calculating distribution of cells
+
+Selecting decomposer scotch
+
+Finished decomposition in 0.045165 s
+
+Calculating original mesh data
+
+Distributing cells to processors
+
+Distributing faces to processors
+
+Distributing points to processors
+
+Constructing processor meshes
+
+Processor 0
+    Number of cells = 19212
+    Number of faces shared with processor 1 = 128
+    Number of faces shared with processor 2 = 124
+    Number of processor patches = 2
+    Number of processor faces = 252
+    Number of boundary faces = 38768
+
+Processor 1
+    Number of cells = 19200
+    Number of faces shared with processor 0 = 128
+    Number of faces shared with processor 2 = 128
+    Number of processor patches = 2
+    Number of processor faces = 256
+    Number of boundary faces = 38700
+
+Processor 2
+    Number of cells = 18932
+    Number of faces shared with processor 0 = 124
+    Number of faces shared with processor 1 = 128
+    Number of processor patches = 2
+    Number of processor faces = 252
+    Number of boundary faces = 38180
+
+Number of processor faces = 380
+Max number of cells = 19212 (0.5092076% above average 19114.67)
+Max number of processor patches = 2 (0% above average 2)
+Max number of faces between processors = 256 (1.052632% above average 253.3333)
+
+Time = 0s
+
+Decomposing FV fields
+
+    Decomposing volScalarFields
+
+        p
+        nuTilda
+        nut
+
+    Decomposing volVectorFields
+
+        U
+
+Decomposing point fields
+
+    (no point fields)
+
+End
+
