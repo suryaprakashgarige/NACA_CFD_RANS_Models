@@ -55,7 +55,18 @@ WIDTH_MULTI = 16.0 * CM_TO_INCH   # 6.30 in (16.0 cm)
 df_results = pd.read_csv(os.path.join(OUTPUT_DIR, "results_all.csv"))
 df_yplus = pd.read_csv(os.path.join(OUTPUT_DIR, "yplus.csv"))
 df_cp = pd.read_csv(os.path.join(OUTPUT_DIR, "cp_0012_a00.csv"))
-df_table_coeff = pd.read_csv(os.path.join(OUTPUT_DIR, "table_aerodynamic_coefficients.csv"))
+df_table_raw = pd.read_csv(os.path.join(OUTPUT_DIR, "table_aerodynamic_coefficients.csv"))
+# Pivot long-format (30 simulation rows) into per-alpha comparison view
+df_sa_t = df_table_raw[df_table_raw["model"] == "SA"].set_index(["airfoil", "alpha_deg"])
+df_sst_t = df_table_raw[df_table_raw["model"] == "SST"].set_index(["airfoil", "alpha_deg"])
+df_table_coeff = df_sa_t[["exp_Cl", "exp_Cd", "exp_Cm"]].copy()
+df_table_coeff["SA_Cl"] = df_sa_t["cfd_Cl"]
+df_table_coeff["SA_Cd"] = df_sa_t["cfd_Cd"]
+df_table_coeff["SA_Cm"] = df_sa_t["cfd_Cm"]
+df_table_coeff["SST_Cl"] = df_sst_t["cfd_Cl"]
+df_table_coeff["SST_Cd"] = df_sst_t["cfd_Cd"]
+df_table_coeff["SST_Cm"] = df_sst_t["cfd_Cm"]
+df_table_coeff = df_table_coeff.reset_index()
 
 def save_fig(fig, base_name):
     png_path = os.path.join(FIGS_DIR, f"{base_name}.png")

@@ -218,78 +218,50 @@ for c in checks:
     lines.append(f"| **{c['item']}** | {c['paper_val']} | {c['extracted_val']} | {c['diff_pct']} | **{c['status']}** |")
 
 mismatches = [c for c in checks if c["status"] == "MISMATCH"]
-lines.append("\n## Cross-Check Summary\n")
 if not mismatches:
-    lines.append("**STATUS: PERFECT MATCH ACROSS ALL 11 BENCHMARK SPECIFICATIONS.** Zero mismatches detected.")
+    print("[CHECK] All 11 benchmark cross-checks passed (0 mismatches).")
 else:
-    lines.append(f"**ALERT: {len(mismatches)} MISMATCHES DETECTED:**")
-    for m in mismatches:
-        lines.append(f"- {m['item']}: expected {m['paper_val']}, got {m['extracted_val']}")
+    print(f"[CHECK] {len(mismatches)} mismatches detected.")
 
-report_text = "\n".join(lines)
-with open(os.path.join(DOCS_DIR, "step2_crosscheck_report.md"), "w", encoding="utf-8") as f:
-    f.write(report_text)
-print("[REPORT] Saved step2_crosscheck_report.md")
-
-# --- STEP 4 TABLE EXPORTS ---
+# --- STEP 4 TABLE EXPORTS (30 individual matrix runs: 3 airfoils x 2 models x 5 alphas) ---
 table_rows = []
 for af in ["naca0012", "naca2412", "naca4412"]:
     alphas = exp_bench[af]["alphas"]
     wt_cl = exp_bench[af]["cl"]
     wt_cd = exp_bench[af]["cd"]
     wt_cm = exp_bench[af]["cm"]
-    
-    for i, a in enumerate(alphas):
-        c_sa = res_map.get((af, "SA", int(a)))
-        c_sst = res_map.get((af, "SST", int(a)))
-        
-        sa_cl = c_sa["Cl"] if c_sa and c_sa["status"] != "FAILED_diverged" else np.nan
-        sa_cd = c_sa["Cd"] if c_sa and c_sa["status"] != "FAILED_diverged" else np.nan
-        sa_cm = c_sa["Cm"] if c_sa and c_sa["status"] != "FAILED_diverged" else np.nan
-        
-        sst_cl = c_sst["Cl"] if c_sst and c_sst["status"] != "FAILED_diverged" else np.nan
-        sst_cd = c_sst["Cd"] if c_sst and c_sst["status"] != "FAILED_diverged" else np.nan
-        sst_cm = c_sst["Cm"] if c_sst and c_sst["status"] != "FAILED_diverged" else np.nan
-        
-        closest_cl = "N/A"
-        if not np.isnan(sa_cl) and not np.isnan(sst_cl):
-            diff_sa = abs(sa_cl - wt_cl[i])
-            diff_sst = abs(sst_cl - wt_cl[i])
-            closest_cl = "Spalart-Allmaras" if diff_sa < diff_sst else "k-omega SST"
-        elif not np.isnan(sa_cl):
-            closest_cl = "Spalart-Allmaras"
-        elif not np.isnan(sst_cl):
-            closest_cl = "k-omega SST"
-            
-        closest_cd = "N/A"
-        if not np.isnan(sa_cd) and not np.isnan(sst_cd):
-            diff_sa = abs(sa_cd - wt_cd[i])
-            diff_sst = abs(sst_cd - wt_cd[i])
-            closest_cd = "Spalart-Allmaras" if diff_sa < diff_sst else "k-omega SST"
-        elif not np.isnan(sa_cd):
-            closest_cd = "Spalart-Allmaras"
-        elif not np.isnan(sst_cd):
-            closest_cd = "k-omega SST"
 
-        table_rows.append({
-            "airfoil": af.upper(),
-            "alpha_deg": a,
-            "exp_Cl": wt_cl[i],
-            "exp_Cd": wt_cd[i],
-            "exp_Cm": wt_cm[i],
-            "SA_Cl": sa_cl,
-            "SA_diff_Cl_pct": (sa_cl - wt_cl[i])/wt_cl[i]*100 if wt_cl[i] != 0 and not np.isnan(sa_cl) else (np.nan if np.isnan(sa_cl) else sa_cl*100),
-            "SA_Cd": sa_cd,
-            "SA_diff_Cd_pct": (sa_cd - wt_cd[i])/wt_cd[i]*100 if not np.isnan(sa_cd) else np.nan,
-            "SA_Cm": sa_cm,
-            "SST_Cl": sst_cl,
-            "SST_diff_Cl_pct": (sst_cl - wt_cl[i])/wt_cl[i]*100 if wt_cl[i] != 0 and not np.isnan(sst_cl) else (np.nan if np.isnan(sst_cl) else sst_cl*100),
-            "SST_Cd": sst_cd,
-            "SST_diff_Cd_pct": (sst_cd - wt_cd[i])/wt_cd[i]*100 if not np.isnan(sst_cd) else np.nan,
-            "SST_Cm": sst_cm,
-            "closest_Cl_model": closest_cl,
-            "closest_Cd_model": closest_cd
-        })
+    for model in ["SA", "SST"]:
+        for i, a in enumerate(alphas):
+            c_run = res_map.get((af, model, int(a)))
+            status = c_run["status"] if c_run else "missing"
+            diverged = (c_run is None) or (status == "FAILED_diverged")
+
+            cfd_cl = np.nan if diverged else c_run["Cl"]
+            cfd_cd = np.nan if diverged else c_run["Cd"]
+            cfd_cm = np.nan if diverged else c_run["Cm"]
+
+            diff_cl_pct = (
+                (cfd_cl - wt_cl[i]) / wt_cl[i] * 100
+                if wt_cl[i] != 0 and not np.isnan(cfd_cl)
+                else (np.nan if np.isnan(cfd_cl) else cfd_cl * 100)
+            )
+            diff_cd_pct = (cfd_cd - wt_cd[i]) / wt_cd[i] * 100 if not np.isnan(cfd_cd) else np.nan
+
+            table_rows.append({
+                "airfoil": af.upper(),
+                "model": model,
+                "alpha_deg": a,
+                "exp_Cl": wt_cl[i],
+                "exp_Cd": wt_cd[i],
+                "exp_Cm": wt_cm[i],
+                "cfd_Cl": cfd_cl,
+                "diff_Cl_pct": diff_cl_pct,
+                "cfd_Cd": cfd_cd,
+                "diff_Cd_pct": diff_cd_pct,
+                "cfd_Cm": cfd_cm,
+                "status": status,
+            })
 
 df_table_coeff = pd.DataFrame(table_rows)
 df_table_coeff.to_csv(os.path.join(OUTPUT_DIR, "table_aerodynamic_coefficients.csv"), index=False)
