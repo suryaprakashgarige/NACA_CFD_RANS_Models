@@ -8,7 +8,7 @@
 An end-to-end **OpenFOAM v13** computational fluid dynamics (CFD) validation study comparing the **Spalart-Allmaras (SA)** one-equation and **Menter $k$-$\omega$ SST** two-equation RANS turbulence models across three NACA 4-digit airfoils (**NACA 0012**, **NACA 2412**, and **NACA 4412**) against experimental wind-tunnel benchmarks at $\text{Re} = 6.0 \times 10^6$ and $M = 0.15$.
 
 > **Research Team:** Garige Surya Prakash\*, Shaik Faaiq Hussain, Nandam Venkata Prasanna Anjaneyulu  
-> **Supervisor:** Dr. Yagya Dutta Dwivedi — *Department of Aeronautical Engineering, Institute of Aeronautical Engineering (IARE), Hyderabad, India*
+> **Supervisor & Mentor:** Dr. Yagya Dutta Dwivedi — *Department of Aeronautical Engineering, Institute of Aeronautical Engineering (IARE), Hyderabad, India*
 
 ---
 
