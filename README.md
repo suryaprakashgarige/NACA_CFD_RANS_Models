@@ -33,8 +33,14 @@ NACA_CFD_RANS_Models/
 ├── README.md                          # Project overview, results summary, & usage
 ├── LICENSE                            # MIT License
 ├── requirements.txt                   # Python dependencies for post-processing & tests
-├── Allrun                             # Standard OpenFOAM master runner (--postprocess | --full | --verify)
+├── Allrun                             # Root entrypoint (--postprocess default | --full | --verify)
 ├── reproduce_outputs.sh               # Fast post-processing & figure reproduction script
+│
+├── simulation/                        # Standalone OpenFOAM v13 simulation runner
+│   ├── Allrun                         # Runs all 30 matrix simulations + a08_kfix + post-processing
+│   ├── setup_sweep_case.py            # Case generator (mesh, rotated BCs, schemes, controlDict)
+│   ├── run_sweep.py                   # 15-case continuation sweep runner (SA / SST)
+│   └── run_a08_kfix.py                # Controlled a08_kfix simulation runner
 │
 ├── docs/                              # Technical sweep summary report
 │   └── final_sweep_report.md
@@ -86,6 +92,11 @@ python3 -m pytest -v tests
 
 ### 4. Re-run Full OpenFOAM v13 Simulation Matrix (Requires OpenFOAM v13)
 ```bash
+# Option A: Standalone simulation runner
+chmod +x simulation/Allrun
+./simulation/Allrun
+
+# Option B: Via root entrypoint
 ./Allrun --full
 ```
 
