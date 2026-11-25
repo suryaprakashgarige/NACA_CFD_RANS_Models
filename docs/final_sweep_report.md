@@ -1,8 +1,9 @@
 # Experimental Wind Tunnel Validation of OpenFOAM RANS Turbulence Models for Subsonic NACA Airfoils: A Systematic Comparative Study of Spalart-Allmaras and Menter $k$-$\omega$ SST
 
-**Author:** Surya Prakash Garige  
+**Authors:** Garige Surya Prakash, Shaik Faaiq Hussain, Nandam Venkata Prasanna Anjaneyulu  
+**Supervisor & Mentor:** Dr. Yagya Dutta Dwivedi (Professor, Department of Aeronautical Engineering)  
 **Affiliation:** Department of Aeronautical Engineering, Institute of Aeronautical Engineering (IARE), Hyderabad, Telangana, India  
-**Email:** suryaprakashgarige009@gmail.com  
+**Contact:** suryaprakashgarige009@gmail.com  
 **Computational Framework:** OpenFOAM Foundation v13 (`foamRun` / Steady Incompressible SIMPLE Solver)  
 **Operating Conditions:** Chord $c = 1.0\,\text{m}$, $U_\infty = 43.824\,\text{m/s}$ (and $52.08\,\text{m/s}$ for $Re = 6.0 \times 10^6$ benchmark), $\nu = 7.304 \times 10^{-6}\,\text{m}^2/\text{s}$ (and $8.68 \times 10^{-6}\,\text{m}^2/\text{s}$), Reynolds Number $Re = 6.0 \times 10^6$, Mach $M = 0.15$  
 **Results Directory:** [`results/`](../results/)
