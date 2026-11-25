@@ -2,7 +2,7 @@
 
 [![OpenFOAM](https://img.shields.io/badge/OpenFOAM-Foundation%20v13-blue.svg)](https://openfoam.org)
 [![Turbulence Models](https://img.shields.io/badge/RANS-SA%20%7C%20k--%CF%89%20SST-orange.svg)](https://turbmodels.larc.nasa.gov)
-[![Airfoils](https://img.shields.io/badge/Airfoils-NACA%200012%20%7C%202412%20%7C%204412-success.svg)](docs/Research_Paper_NACA_Airfoils_CFD_Validation.pdf)
+[![Airfoils](https://img.shields.io/badge/Airfoils-NACA%200012%20%7C%202412%20%7C%204412-success.svg)](docs/final_sweep_report.md)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-green.svg)](requirements.txt)
 
 An end-to-end **OpenFOAM v13** computational fluid dynamics (CFD) validation study comparing the **Spalart-Allmaras (SA)** one-equation and **Menter $k$-$\omega$ SST** two-equation RANS turbulence models across three NACA 4-digit airfoils (**NACA 0012**, **NACA 2412**, and **NACA 4412**) against experimental wind-tunnel benchmarks at $\text{Re} = 6.0 \times 10^6$ and $M = 0.15$.
@@ -36,11 +36,8 @@ NACA_CFD_RANS_Models/
 ├── Allrun                             # Standard OpenFOAM master runner (--postprocess | --full | --verify)
 ├── reproduce_outputs.sh               # Fast post-processing & figure reproduction script
 │
-├── docs/                              # Final paper & technical cross-check reports
-│   ├── Research_Paper_NACA_Airfoils_CFD_Validation.pdf
-│   ├── Research_Paper_NACA_Airfoils_CFD_Validation.docx
-│   ├── final_sweep_report.md
-│   └── step2_crosscheck_report.md
+├── docs/                              # Technical sweep summary report
+│   └── final_sweep_report.md
 │
 ├── data/                              # Experimental & NASA TMR reference datasets
 │   ├── exp/                           # Ladson, Abbott & von Doenhoff, Gregory & O'Reilly, McCroskey
@@ -96,8 +93,7 @@ python3 -m pytest -v tests
 
 ## Deliverables Index
 
-- **Research Paper (PDF):** [Research_Paper_NACA_Airfoils_CFD_Validation.pdf](docs/Research_Paper_NACA_Airfoils_CFD_Validation.pdf)
-- **Research Paper (DOCX):** [Research_Paper_NACA_Airfoils_CFD_Validation.docx](docs/Research_Paper_NACA_Airfoils_CFD_Validation.docx)
-- **Aerodynamic Coefficients Table:** [table_aerodynamic_coefficients.csv](results/tables/table_aerodynamic_coefficients.csv)
+- **Sweep Summary Report:** [final_sweep_report.md](docs/final_sweep_report.md)
+- **Aerodynamic Coefficients Table (30 Runs):** [table_aerodynamic_coefficients.csv](results/tables/table_aerodynamic_coefficients.csv)
 - **Statistical Summary Table:** [table_summary_statistics.csv](results/tables/table_summary_statistics.csv)
-- **Cross-Check Verification Report:** [step2_crosscheck_report.md](docs/step2_crosscheck_report.md)
+- **All Extracted Case Metrics:** [results_all.csv](results/tables/results_all.csv)

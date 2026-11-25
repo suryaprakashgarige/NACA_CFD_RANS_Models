@@ -25,5 +25,5 @@ echo "[3/3] Rendering publication figures F01-F11 (PNG + PDF)..."
 python3 "$PROJECT_ROOT/scripts/postprocess/step3_plots.py"
 
 echo "================================================================="
-echo "  [OK] Outputs updated in results/tables/, results/figures/, docs/"
+echo "  [OK] Outputs updated in results/tables/ and results/figures/"
 echo "================================================================="

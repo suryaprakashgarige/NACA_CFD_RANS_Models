@@ -24,10 +24,7 @@ def test_core_directory_structure():
         "requirements.txt",
         "Allrun",
         "reproduce_outputs.sh",
-        "docs/Research_Paper_NACA_Airfoils_CFD_Validation.pdf",
-        "docs/Research_Paper_NACA_Airfoils_CFD_Validation.docx",
         "docs/final_sweep_report.md",
-        "docs/step2_crosscheck_report.md",
     ]:
         assert (ROOT / rel).exists(), f"Missing required deliverable: {rel}"
 
@@ -66,7 +63,7 @@ def test_results_tables_complete():
     assert set(df_res["airfoil"].unique()) == {"naca0012", "naca2412", "naca4412"}
 
     df_coeff = pd.read_csv(coeff_csv)
-    assert len(df_coeff) == 15, f"Expected 15 airfoil-alpha rows, got {len(df_coeff)}"
+    assert len(df_coeff) == 30, f"Expected 30 simulation rows (3 airfoils x 2 models x 5 alphas), got {len(df_coeff)}"
 
 
 def test_publication_figures_complete():
@@ -87,9 +84,3 @@ def test_publication_figures_complete():
     for stem in expected_stems:
         assert (FIGS_DIR / f"{stem}.png").is_file(), f"Missing {stem}.png"
         assert (FIGS_DIR / f"{stem}.pdf").is_file(), f"Missing {stem}.pdf"
-
-
-def test_crosscheck_report_has_zero_mismatches():
-    """Verify step2_crosscheck_report.md reports zero mismatches."""
-    text = (DOCS_DIR / "step2_crosscheck_report.md").read_text(encoding="utf-8")
-    assert "Zero mismatches detected" in text
