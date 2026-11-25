@@ -5,10 +5,7 @@
 **Email:** suryaprakashgarige009@gmail.com  
 **Computational Framework:** OpenFOAM Foundation v13 (`foamRun` / Steady Incompressible SIMPLE Solver)  
 **Operating Conditions:** Chord $c = 1.0\,\text{m}$, $U_\infty = 43.824\,\text{m/s}$ (and $52.08\,\text{m/s}$ for $Re = 6.0 \times 10^6$ benchmark), $\nu = 7.304 \times 10^{-6}\,\text{m}^2/\text{s}$ (and $8.68 \times 10^{-6}\,\text{m}^2/\text{s}$), Reynolds Number $Re = 6.0 \times 10^6$, Mach $M = 0.15$  
-**Deliverable Documents:**
-- **Microsoft Word Manuscript:** [`Research_Paper_NACA_Airfoils_CFD_Validation.docx`](./Research_Paper_NACA_Airfoils_CFD_Validation.docx)
-- **Publication-Grade PDF:** [`Research_Paper_NACA_Airfoils_CFD_Validation.pdf`](./Research_Paper_NACA_Airfoils_CFD_Validation.pdf)
-- **Workspace Mirror:** [`airfoil-validation/results/`](../results/)
+**Results Directory:** [`results/`](../results/)
 
 ---
 
@@ -190,10 +187,6 @@ Standard aerodynamic sign notation is employed, where positive values of $-C_p$ 
 
 ---
 
-## 6. Accessing the Updated Deliverable Files
+## 6. Accessing the Output Files
 
-The complete manuscript has been fully recompiled with all Wind Tunnel vs. CFD comparisons, facility schematics, error tables, and correlation plots:
-
-1. **Word Manuscript (`.docx`):** [`Research_Paper_NACA_Airfoils_CFD_Validation.docx`](./Research_Paper_NACA_Airfoils_CFD_Validation.docx)
-2. **Publication-Grade PDF (`.pdf`):** [`Research_Paper_NACA_Airfoils_CFD_Validation.pdf`](./Research_Paper_NACA_Airfoils_CFD_Validation.pdf)
-3. **Workspace Copies:** Available in `results/`.
+All extracted tables, convergence plots, and figures are stored in [`results/`](../results/).
