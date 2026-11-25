@@ -113,7 +113,7 @@ for af, model, al, cdir, cname in all_cases_meta:
         'Cm': cm,
         'bounding_k': kb,
         'status': status,
-        'case_dir': cdir
+        'case_dir': os.path.relpath(cdir, BASE_DIR)
     })
     
     yp_min, yp_max, yp_avg = np.nan, np.nan, np.nan
